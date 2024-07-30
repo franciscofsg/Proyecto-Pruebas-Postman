@@ -1,0 +1,330 @@
+{
+	"info": {
+		"_postman_id": "c8d98c86-e1b2-4abc-8052-1fcd8ddc5cab",
+		"name": "MyStore API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36151929"
+	},
+	"item": [
+		{
+			"name": "Traer todos las categorias",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//postman.setNextRequest(\"consultarProductoPorId\");\r",
+							"pm.execution.setNextRequest(\"consultarProductoPorId\")"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/catalog/categories",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"catalog",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API Productos x Categoria",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.globals.set(\"CATEGORIA1\", \"software\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validacion de respuesta de un vector\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.products[2].name).to.eql(\"playStation4\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/catalog/category/{{CATEGORIA1}}/products?limit=7&skip=1",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"catalog",
+						"category",
+						"{{CATEGORIA1}}",
+						"products"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "7"
+						},
+						{
+							"key": "skip",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "consultarProductoPorId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches id\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"price\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Date is present\", function () {\r",
+							"    pm.response.to.have.header(\"Date\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validar que la respuesta tenga estado activo\", function () {\r",
+							"  \r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).equal(\"active\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//ASSERTION MAS AVANZADAS\r",
+							"\r",
+							"pm.test(\"Validacion con multiples aserciones\", () => {\r",
+							"    //parse the response JSON and test three properties\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.name).to.eql('Resident Evil 3 Remake');\r",
+							"    pm.expect(responseJson.description).to.contains('Juego Zombies');\r",
+							"    pm.expect(responseJson.name).to.be.a('string');\r",
+							"    pm.expect(responseJson.name).to.have.lengthOf(22);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//postman.setNextRequest(\"API Eliminar Producto\");\r",
+							"pm.execution.setNextRequest(\"API Registrar Producto\");\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/catalog/product/887637",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"catalog",
+						"product",
+						"887637"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API Eliminar Producto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/catalog/product/{{ID-PRODUCTO}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"catalog",
+						"product",
+						"{{ID-PRODUCTO}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API Registrar Producto",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"name\", \"Portatil\");\r",
+							"pm.variables.set(\"price\", 900000);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{name}}\",\r\n  \"price\": \"{{price}}\",\r\n  \"manufacturer\": \"prueba\",\r\n  \"category\": \"vueltiao\",\r\n  \"description\": \"prueba\",\r\n  \"tags\": \"prueba\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/catalog/product",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"catalog",
+						"product"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
